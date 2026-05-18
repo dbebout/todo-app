@@ -3,16 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Todo App</title>
+  <title>My Dashboard</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
-  <div class="app-container">
-    <h1>Todo App</h1>
-    <div id="app"></div>
+  <div class="dashboard">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <h2 class="logo">My Dashboard</h2>
+
+      <nav>
+        <button class="nav-btn active" data-page="todo">📝 To‑Do</button>
+        <button class="nav-btn" data-page="weather">🌤️ Weather</button>
+        <button class="nav-btn" data-page="notes">🗒️ Notes</button>
+        <button class="nav-btn" data-page="ai">🤖 AI Chat</button>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main id="mainContent">
+      <!-- Todo App loads here -->
+      <div id="app"></div>
+    </main>
+
   </div>
 
+  <script src="js/dashboard.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
