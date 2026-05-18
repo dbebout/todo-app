@@ -1,15 +1,23 @@
 // Enable sidebar navigation
 const navButtons = document.querySelectorAll(".nav-btn");
 
-navButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelector(".nav-btn.active")?.classList.remove("active");
-    btn.classList.add("active");
+document.addEventListener("DOMContentLoaded", () => {
+  const navButtons = document.querySelectorAll(".nav-btn");
 
-    const page = btn.getAttribute("data-page");
-    loadPage(page);
+  navButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelector(".nav-btn.active")?.classList.remove("active");
+      btn.classList.add("active");
+
+      const page = btn.getAttribute("data-page");
+      loadPage(page);
+    });
   });
+
+  // Load default page
+  loadPage("todo");
 });
+
 
 
 // Handle sidebar navigation
