@@ -1,87 +1,92 @@
-// Load the Todo UI into the #app container
+// -----------------------------
+// LOAD THE TODO UI
+// -----------------------------
 function loadTodoUI() {
   const app = document.getElementById("app");
+  if (!app) {
+    console.error("ERROR: #app not found in DOM");
+    return;
+  }
 
   app.innerHTML = `
-    <div class="todo-input-row">
-      <input id="todoInput" placeholder="Add a task..." />
-
-      <select id="categorySelect">
-        <option value="Personal">Personal</option>
-        <option value="Errands">Errands</option>
-        <option value="Fitness">Fitness</option>
-        <option value="Family">Family</option>
-      </select>
-
-      <select id="prioritySelect">
-        <option value="Low">Low</option>
-        <option value="Medium">Medium</option>
-        <option value="High">High</option>
-      </select>
-
-      <button id="addBtn">Add</button>
-    </div>
-
-    <ul id="todoList"></ul>
+    <p><strong>Your Tasks:</strong></p>
   `;
-
-  document.getElementById("addBtn").onclick = addTodo;
 }
 
-// Render the todo list
+// -----------------------------
+// LOAD TODOS FROM LOCALSTORAGE
+// -----------------------------
+function getTodos() {
+  return JSON.parse(localStorage.getItem("todos") || "[]");
+}
+
+// -----------------------------
+// SAVE TODOS TO LOCALSTORAGE
+// -----------------------------
+function saveTodos(todos) {
+  localStorage.setItem("todos", JSON.stringify(todos));
+}
+
+// -----------------------------
+// RENDER TODOS
+// -----------------------------
 function renderTodos() {
+  const todos = getTodos();
   const list = document.getElementById("todoList");
-  if (!list) return; // Prevent errors if UI not loaded yet
+
+  if (!list) {
+    console.error("ERROR: #todoList not found");
+    return;
+  }
 
   list.innerHTML = "";
 
-  const todos = JSON.parse(localStorage.getItem("todos")) || [];
-
   todos.forEach((todo, index) => {
     const li = document.createElement("li");
-    li.classList.add("fade-in");
+    li.className = "todo-item";
 
     li.innerHTML = `
-      <div class="todo-main">
-        <span class="todo-text">${todo.text}</span>
-        <span class="badge category">${todo.category}</span>
-        <span class="badge priority ${todo.priority.toLowerCase()}">${todo.priority}</span>
-      </div>
-
-      <button class="deleteBtn" data-index="${index}">✕</button>
+      <span>
+        <strong>${todo.text}</strong>
+        <em>(${todo.category}, ${todo.priority})</em>
+      </span>
+      <button onclick="deleteTodo(${index})">Delete</button>
     `;
 
     list.appendChild(li);
   });
-
-  document.querySelectorAll(".deleteBtn").forEach(btn => {
-    btn.onclick = () => {
-      const index = btn.getAttribute("data-index");
-      deleteTodo(index);
-    };
-  });
 }
 
-// Add a new todo
+// -----------------------------
+// ADD A TODO
+// -----------------------------
 function addTodo() {
-  const text = document.getElementById("todoInput").value.trim();
-  const category = document.getElementById("categorySelect").value;
-  const priority = document.getElementById("prioritySelect").value;
+  const input = document.getElementById("todoInput");
+  const category = document.getElementById("categorySelect");
+  const priority = document.getElementById("prioritySelect");
 
-  if (text === "") return;
+  if (!input.value.trim()) return;
 
-  const todos = JSON.parse(localStorage.getItem("todos")) || [];
-  todos.push({ text, category, priority });
-  localStorage.setItem("todos", JSON.stringify(todos));
+  const todos = getTodos();
 
-  document.getElementById("todoInput").value = "";
+  todos.push({
+    text: input.value.trim(),
+    category: category.value,
+    priority: priority.value
+  });
+
+  saveTodos(todos);
+  input.value = "";
+
   renderTodos();
 }
 
-// Delete a todo
+// -----------------------------
+// DELETE A TODO
+// -----------------------------
 function deleteTodo(index) {
-  const todos = JSON.parse(localStorage.getItem("todos")) || [];
+  const todos = getTodos();
   todos.splice(index, 1);
-  localStorage.setItem("todos", JSON.stringify(todos));
+  saveTodos(todos);
   renderTodos();
 }
