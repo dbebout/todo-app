@@ -11,10 +11,13 @@ navButtons.forEach(btn => {
   });
 });
 
+// Load the correct page
 function loadPage(page) {
   if (page === "todo") {
     mainContent.innerHTML = `<div id="app"></div>`;
-    renderTodos(); // from your todo app
+    loadTodoUI();
+    renderTodos();
+    return;
   }
 
   if (page === "weather") {
@@ -22,6 +25,7 @@ function loadPage(page) {
       <h1>Weather</h1>
       <p>Weather module coming soon.</p>
     `;
+    return;
   }
 
   if (page === "notes") {
@@ -29,6 +33,7 @@ function loadPage(page) {
       <h1>Notes</h1>
       <p>Notes module coming soon.</p>
     `;
+    return;
   }
 
   if (page === "ai") {
@@ -36,6 +41,9 @@ function loadPage(page) {
       <h1>AI Chat</h1>
       <p>AI chat module coming soon.</p>
     `;
+    return;
   }
 }
 
+// Load To‑Do by default
+loadPage("todo");

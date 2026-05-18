@@ -1,30 +1,38 @@
-const app = document.getElementById("app");
+// Load the Todo UI into the #app container
+function loadTodoUI() {
+  const app = document.getElementById("app");
 
-app.innerHTML = `
-  <div class="todo-input-row">
-    <input id="todoInput" placeholder="Add a task..." />
+  app.innerHTML = `
+    <div class="todo-input-row">
+      <input id="todoInput" placeholder="Add a task..." />
 
-    <select id="categorySelect">
-      <option value="Personal">Personal</option>
-      <option value="Errands">Errands</option>
-      <option value="Fitness">Fitness</option>
-      <option value="Family">Family</option>
-    </select>
+      <select id="categorySelect">
+        <option value="Personal">Personal</option>
+        <option value="Errands">Errands</option>
+        <option value="Fitness">Fitness</option>
+        <option value="Family">Family</option>
+      </select>
 
-    <select id="prioritySelect">
-      <option value="Low">Low</option>
-      <option value="Medium">Medium</option>
-      <option value="High">High</option>
-    </select>
+      <select id="prioritySelect">
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+      </select>
 
-    <button id="addBtn">Add</button>
-  </div>
+      <button id="addBtn">Add</button>
+    </div>
 
-  <ul id="todoList"></ul>
-`;
+    <ul id="todoList"></ul>
+  `;
 
+  document.getElementById("addBtn").onclick = addTodo;
+}
+
+// Render the todo list
 function renderTodos() {
   const list = document.getElementById("todoList");
+  if (!list) return; // Prevent errors if UI not loaded yet
+
   list.innerHTML = "";
 
   const todos = JSON.parse(localStorage.getItem("todos")) || [];
@@ -54,31 +62,6 @@ function renderTodos() {
   });
 }
 
+// Add a new todo
 function addTodo() {
-  const text = document.getElementById("todoInput").value.trim();
-  const category = document.getElementById("categorySelect").value;
-  const priority = document.getElementById("prioritySelect").value;
-
-  if (text === "") return;
-
-  const todos = JSON.parse(localStorage.getItem("todos")) || [];
-
-  todos.push({ text, category, priority });
-
-  localStorage.setItem("todos", JSON.stringify(todos));
-
-  document.getElementById("todoInput").value = "";
-  renderTodos();
-}
-
-function deleteTodo(index) {
-  const todos = JSON.parse(localStorage.getItem("todos")) || [];
-  todos.splice(index, 1);
-  localStorage.setItem("todos", JSON.stringify(todos));
-  renderTodos();
-}
-
-document.getElementById("addBtn").onclick = addTodo;
-
-renderTodos();
-
+  const
