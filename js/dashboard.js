@@ -1,7 +1,7 @@
-// Enable sidebar navigation
-const navButtons = document.querySelectorAll(".nav-btn");
-
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("Dashboard JS loaded");
+
+  // Enable sidebar navigation
   const navButtons = document.querySelectorAll(".nav-btn");
 
   navButtons.forEach(btn => {
@@ -17,8 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Load default page
   loadPage("todo");
 });
-
-
 
 // Handle sidebar navigation
 function loadPage(page) {
@@ -53,7 +51,9 @@ function loadPage(page) {
       <ul id="todoList"></ul>
     `;
 
-    loadTodos();
+    // Load the UI + tasks
+    loadTodoUI();
+    renderTodos();
     return;
   }
 
@@ -99,5 +99,3 @@ function loadPage(page) {
   }
 }
 
-// Load default page
-loadPage("todo");
