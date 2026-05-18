@@ -2,6 +2,57 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>My To‑Do Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+
+    <header>
+      <h1>My Dashboard</h1>
+      <button id="themeToggle">🌙</button>
+    </header>
+
+    <section class="stats">
+      <div class="stat-card">
+        <h3>Total Tasks</h3>
+        <p id="totalTasks">0</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>Completed</h3>
+        <p id="completedTasks">0</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>Overdue</h3>
+        <p id="overdueTasks">0</p>
+      </div>
+    </section>
+
+    <section class="progress-section">
+      <label>Progress</label>
+      <div class="progress-bar">
+        <div id="progressFill"></div>
+      </div>
+    </section>
+
+    <div class="input-row">
+      <input id="taskInput" type="text" placeholder="What do you need to do?" />
+      <input id="dateInput" type="date" />
+      <button id="addBtn">Add</button>
+    </div>
+
+    <ul id="taskList"></ul>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Todo App</title>
 
