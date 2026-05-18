@@ -64,4 +64,24 @@ function renderTodos() {
 
 // Add a new todo
 function addTodo() {
-  const
+  const text = document.getElementById("todoInput").value.trim();
+  const category = document.getElementById("categorySelect").value;
+  const priority = document.getElementById("prioritySelect").value;
+
+  if (text === "") return;
+
+  const todos = JSON.parse(localStorage.getItem("todos")) || [];
+  todos.push({ text, category, priority });
+  localStorage.setItem("todos", JSON.stringify(todos));
+
+  document.getElementById("todoInput").value = "";
+  renderTodos();
+}
+
+// Delete a todo
+function deleteTodo(index) {
+  const todos = JSON.parse(localStorage.getItem("todos")) || [];
+  todos.splice(index, 1);
+  localStorage.setItem("todos", JSON.stringify(todos));
+  renderTodos();
+}
