@@ -1,13 +1,12 @@
+// Load current weather
 async function loadWeather() {
   const card = document.getElementById("weatherCard");
   card.innerHTML = "Detecting location...";
 
-  // Get user location
   navigator.geolocation.getCurrentPosition(async (pos) => {
     const lat = pos.coords.latitude;
     const lon = pos.coords.longitude;
 
-    // Open-Meteo API (free, no key needed)
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
 
     try {
@@ -79,10 +78,60 @@ function getWeatherDescription(code) {
 
   return map[code] || "Unknown weather";
 }
-loadWeather()
-getWeatherIcon()
-getWeatherDescription()
 
-⬇️ ADD THIS BELOW ⬇️
+// ⭐ 7‑Day Forecast
+async function loadForecast() {
+  const forecastBox = document.getElementById("forecast");
+  forecastBox.innerHTML = "Detecting location...";
 
-loadForecast()
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+    const lat = pos.coords.latitude;
+    const lon = pos.coords.longitude;
+
+    const url = `
+      https://api.open-meteo.com/v1/forecast
+      ?latitude=${lat}
+      &longitude=${lon}
+      &daily=weathercode,temperature_2m_max,temperature_2m_min
+      &timezone=auto
+    `.replace(/\s+/g, '');
+
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+
+      const days = data.daily.time;
+      const max = data.daily.temperature_2m_max;
+      const min = data.daily.temperature_2m_min;
+      const codes = data.daily.weathercode;
+
+      forecastBox.innerHTML = "";
+
+      days.forEach((day, i) => {
+        const icon = getWeatherIcon(codes[i]);
+        const desc = getWeatherDescription(codes[i]);
+
+        const date = new Date(day);
+        const weekday = date.toLocaleDateString("en-US", { weekday: "short" });
+
+        const card = document.createElement("div");
+        card.classList.add("forecast-card");
+
+        card.innerHTML = `
+          <div class="forecast-day">${weekday}</div>
+          <div class="forecast-icon">${icon}</div>
+          <div class="forecast-desc">${desc}</div>
+          <div class="forecast-temp">
+            <span class="high">${max[i]}°</span>
+            <span class="low">${min[i]}°</span>
+          </div>
+        `;
+
+        forecastBox.appendChild(card);
+      });
+
+    } catch (err) {
+      forecastBox.innerHTML = "Unable to load forecast.";
+    }
+  });
+}
