@@ -1,88 +1,95 @@
-async function loadWeather() {
-  const card = document.getElementById("weatherCard");
-  card.innerHTML = "Detecting location...";
+// Enable sidebar navigation
+const navButtons = document.querySelectorAll(".nav-btn");
 
-  // Get user location
-  navigator.geolocation.getCurrentPosition(async (pos) => {
-    const lat = pos.coords.latitude;
-    const lon = pos.coords.longitude;
+navButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelector(".nav-btn.active")?.classList.remove("active");
+    btn.classList.add("active");
 
-    // Open-Meteo API (free, no key needed)
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
-
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-
-      const weather = data.current_weather;
-
-      const temp = weather.temperature;
-      const wind = weather.windspeed;
-      const code = weather.weathercode;
-
-      const condition = getWeatherDescription(code);
-      const icon = getWeatherIcon(code);
-
-      card.innerHTML = `
-        <div class="weather-main">
-          <div class="weather-icon">${icon}</div>
-          <div class="weather-temp">${temp}°F</div>
-        </div>
-
-        <div class="weather-details">
-          <p>${condition}</p>
-          <p>Wind: ${wind} mph</p>
-        </div>
-      `;
-    } catch (err) {
-      card.innerHTML = "Unable to load weather.";
-    }
-  }, () => {
-    card.innerHTML = "Location permission denied.";
+    const page = btn.getAttribute("data-page");
+    loadPage(page);
   });
+});
+
+
+// Handle sidebar navigation
+function loadPage(page) {
+  const mainContent = document.getElementById("mainContent");
+
+  // ---------------------------
+  // TO‑DO PAGE
+  // ---------------------------
+  if (page === "todo") {
+    mainContent.innerHTML = `
+      <h2>To‑Do List</h2>
+
+      <div class="todo-inputs">
+        <input id="todoInput" type="text" placeholder="Add a task..." />
+
+        <select id="categorySelect">
+          <option value="General">General</option>
+          <option value="Work">Work</option>
+          <option value="Home">Home</option>
+          <option value="Fitness">Fitness</option>
+        </select>
+
+        <select id="prioritySelect">
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+
+        <button onclick="addTodo()">Add</button>
+      </div>
+
+      <ul id="todoList"></ul>
+    `;
+
+    loadTodos();
+    return;
+  }
+
+  // ---------------------------
+  // WEATHER PAGE
+  // ---------------------------
+  if (page === "weather") {
+    mainContent.innerHTML = `
+      <div class="weather-container">
+        <h2>Weather</h2>
+        <div id="weatherCard" class="weather-card">Loading weather...</div>
+
+        <h3>7‑Day Forecast</h3>
+        <div id="forecast" class="forecast-row">Loading...</div>
+      </div>
+    `;
+
+    loadWeather();
+    loadForecast();
+    return;
+  }
+
+  // ---------------------------
+  // NOTES PAGE
+  // ---------------------------
+  if (page === "notes") {
+    mainContent.innerHTML = `
+      <h2>Notes</h2>
+      <p>Notes module coming soon.</p>
+    `;
+    return;
+  }
+
+  // ---------------------------
+  // AI CHAT PAGE
+  // ---------------------------
+  if (page === "chat") {
+    mainContent.innerHTML = `
+      <h2>AI Chat</h2>
+      <p>AI chat module coming soon.</p>
+    `;
+    return;
+  }
 }
 
-// Weather icon helper
-function getWeatherIcon(code) {
-  if (code === 0) return "☀️";
-  if ([1, 2, 3].includes(code)) return "⛅";
-  if ([45, 48].includes(code)) return "🌫️";
-  if ([51, 53, 55].includes(code)) return "🌦️";
-  if ([61, 63, 65].includes(code)) return "🌧️";
-  if ([71, 73, 75].includes(code)) return "❄️";
-  if ([95, 96, 99].includes(code)) return "⛈️";
-  return "🌤️";
-}
-
-// Weather description helper
-function getWeatherDescription(code) {
-  const map = {
-    0: "Clear sky",
-    1: "Mainly clear",
-    2: "Partly cloudy",
-    3: "Overcast",
-    45: "Fog",
-    48: "Depositing rime fog",
-    51: "Light drizzle",
-    53: "Moderate drizzle",
-    55: "Dense drizzle",
-    61: "Light rain",
-    63: "Moderate rain",
-    65: "Heavy rain",
-    71: "Light snow",
-    73: "Moderate snow",
-    75: "Heavy snow",
-    95: "Thunderstorm",
-    96: "Thunderstorm with hail",
-    99: "Severe thunderstorm"
-  };
-
-  return map[code] || "Unknown weather";
-}
-loadWeather()
-getWeatherIcon()
-getWeatherDescription()
-
-⬇️ ADD THIS BELOW ⬇️
-
-loadForecast()
+// Load default page
+loadPage("todo");
